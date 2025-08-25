@@ -15,8 +15,10 @@ public class PingCommand {
 
   public static int commandLogic(CommandContext<CommandSourceStack> ctx) {
     Entity executor = ctx.getSource().getExecutor();
+    Player sender = (Player) ctx.getSource().getSender();
 
-    if (!(executor instanceof Player sender)) {
+    if (!(executor instanceof Player)) {
+      sender.sendMessage("Only players can use /ping!");
       return Command.SINGLE_SUCCESS;
     }
 
