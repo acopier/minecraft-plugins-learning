@@ -36,7 +36,10 @@ public class DirectMessageCommand {
     String message = StringArgumentType.getString(ctx, "message");
     Entity executor = ctx.getSource().getExecutor();
 
-    if (!(executor instanceof Player sender)) {
+    Player sender = (Player) ctx.getSource().getSender();
+
+    if (!(executor instanceof Player)) {
+      sender.sendMessage("Only players can use /dm!");
       return Command.SINGLE_SUCCESS;
     }
 

@@ -1,4 +1,4 @@
-name: BetterDiseases
+name: Learning
 version: '1.0-SNAPSHOT'
 main: io.github.acopier.minecraft.plugins.learning.Learning
 api-version: '1.21'
