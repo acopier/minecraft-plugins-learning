@@ -5,7 +5,7 @@ import io.github.acopier.minecraft.plugins.learning.commands.PingCommand;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Learning extends JavaPlugin {
+public final class LearningPlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {

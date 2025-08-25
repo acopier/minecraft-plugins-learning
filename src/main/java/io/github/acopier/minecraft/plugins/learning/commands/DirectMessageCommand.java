@@ -6,20 +6,21 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import io.github.acopier.minecraft.plugins.learning.utilities.Checking;
+import io.github.acopier.minecraft.plugins.learning.utilities.Logging;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
 
 public class DirectMessageCommand {
+  static String commandName = "dm";
+
   public static LiteralArgumentBuilder<CommandSourceStack> createCommand() {
-    return Commands.literal("dm").then(Commands.argument("receiver", StringArgumentType.word()).suggests(DirectMessageCommand::suggestOnlinePlayers) // ✅ auto-complete
+    return Commands.literal(commandName).then(Commands.argument("receiver", StringArgumentType.word()).suggests(DirectMessageCommand::suggestOnlinePlayers) // ✅ auto-complete
         .then(Commands.argument("message", StringArgumentType.greedyString()).executes(DirectMessageCommand::commandLogic)));
   }
 
@@ -34,16 +35,11 @@ public class DirectMessageCommand {
     return builder.buildFuture();
   }
 
+  @SuppressWarnings("SameReturnValue")
   public static int commandLogic(CommandContext<CommandSourceStack> ctx) {
     String receiverName = StringArgumentType.getString(ctx, "receiver");
     String message = StringArgumentType.getString(ctx, "message");
-    Entity executor = ctx.getSource().getExecutor();
-    Server server = Bukkit.getServer();
-
-    if (!(executor instanceof Player sender)) {
-      ctx.getSource().getSender().sendMessage("Only players can use /dm!");
-      return Command.SINGLE_SUCCESS;
-    }
+    Player sender = (Player) Checking.getPlayer(ctx, commandName);
 
     // Case-insensitive search
     Player target = Bukkit.getPlayerExact(receiverName);
@@ -61,7 +57,7 @@ public class DirectMessageCommand {
       return Command.SINGLE_SUCCESS;
     }
 
-    server.broadcast(Component.text("[SURVEILLANCE] " + sender.getName() + " used /dm " + target.getName() + " " + message).color(TextColor.color(0xAAAAAA)), Server.BROADCAST_CHANNEL_ADMINISTRATIVE);
+    Logging.surveillance(String.format("%s used /%s %s", sender.getName(), commandName, target.getName()));
     sender.sendMessage(Component.text("[DM] you -> " + target.getName() + ": " + message));
     target.sendMessage(Component.text("[DM] " + sender.getName() + " -> you: " + message));
 
