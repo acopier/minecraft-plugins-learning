@@ -8,6 +8,6 @@ import org.bukkit.Server;
 public class Logging {
   public static void surveillance(String text) {
     Server server = Bukkit.getServer();
-    server.broadcast(Component.text("[SURVEILLANCE] " + text).color(TextColor.color(0xAAAAAA)), Server.BROADCAST_CHANNEL_ADMINISTRATIVE);
+    server.broadcast(Component.text(String.format("[SURVEILLANCE] | %s", text)).color(TextColor.color(0xAAAAAA)), Server.BROADCAST_CHANNEL_ADMINISTRATIVE);
   }
 }
