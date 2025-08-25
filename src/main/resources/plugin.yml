@@ -1,4 +1,4 @@
-name: Learning
+name: LearningPlugin
 version: '1.0-SNAPSHOT'
-main: io.github.acopier.minecraft.plugins.learning.Learning
+main: io.github.acopier.minecraft.plugins.learning.LearningPlugin
 api-version: '1.21'
