@@ -8,7 +8,10 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -35,11 +38,10 @@ public class DirectMessageCommand {
     String receiverName = StringArgumentType.getString(ctx, "receiver");
     String message = StringArgumentType.getString(ctx, "message");
     Entity executor = ctx.getSource().getExecutor();
+    Server server = Bukkit.getServer();
 
-    Player sender = (Player) ctx.getSource().getSender();
-
-    if (!(executor instanceof Player)) {
-      sender.sendMessage("Only players can use /dm!");
+    if (!(executor instanceof Player sender)) {
+      ctx.getSource().getSender().sendMessage("Only players can use /dm!");
       return Command.SINGLE_SUCCESS;
     }
 
@@ -59,8 +61,9 @@ public class DirectMessageCommand {
       return Command.SINGLE_SUCCESS;
     }
 
-    target.sendMessage("[DM] " + sender.getName() + " -> you: " + message);
-    sender.sendMessage("[DM] you -> " + target.getName() + ": " + message);
+    server.broadcast(Component.text("[SURVEILLANCE] " + sender.getName() + " used /dm " + target.getName() + " " + message).color(TextColor.color(0xAAAAAA)), Server.BROADCAST_CHANNEL_ADMINISTRATIVE);
+    sender.sendMessage(Component.text("[DM] you -> " + target.getName() + ": " + message));
+    target.sendMessage(Component.text("[DM] " + sender.getName() + " -> you: " + message));
 
     return Command.SINGLE_SUCCESS;
   }
