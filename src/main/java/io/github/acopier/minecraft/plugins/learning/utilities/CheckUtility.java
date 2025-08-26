@@ -5,7 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.entity.Player;
 
-public class Checking {
+public class CheckUtility {
   public static Object getPlayer(CommandContext<CommandSourceStack> ctx, String commandName) {
     if (!(ctx.getSource().getExecutor() instanceof Player sender)) {
       ctx.getSource().getSender().sendMessage(String.format("Only players can use /%s!", commandName));

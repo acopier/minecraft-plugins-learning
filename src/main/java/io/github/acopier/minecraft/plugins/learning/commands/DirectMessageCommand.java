@@ -6,8 +6,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import io.github.acopier.minecraft.plugins.learning.utilities.Checking;
-import io.github.acopier.minecraft.plugins.learning.utilities.Logging;
+import io.github.acopier.minecraft.plugins.learning.utilities.CheckUtility;
+import io.github.acopier.minecraft.plugins.learning.utilities.LogUtility;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import net.kyori.adventure.text.Component;
@@ -39,7 +39,7 @@ public class DirectMessageCommand {
   public static int commandLogic(CommandContext<CommandSourceStack> ctx) {
     String receiverName = StringArgumentType.getString(ctx, "receiver");
     String message = StringArgumentType.getString(ctx, "message");
-    Player sender = (Player) Checking.getPlayer(ctx, commandName);
+    Player sender = (Player) CheckUtility.getPlayer(ctx, commandName);
 
     // Case-insensitive search
     Player target = Bukkit.getPlayerExact(receiverName);
@@ -57,7 +57,7 @@ public class DirectMessageCommand {
       return Command.SINGLE_SUCCESS;
     }
 
-    Logging.surveillance(String.format("%s used /%s %s", sender.getName(), commandName, target.getName()));
+    LogUtility.surveillance(String.format("%s used /%s %s", sender.getName(), commandName, target.getName()));
     sender.sendMessage(Component.text("[DM] you -> " + target.getName() + ": " + message));
     target.sendMessage(Component.text("[DM] " + sender.getName() + " -> you: " + message));
 
